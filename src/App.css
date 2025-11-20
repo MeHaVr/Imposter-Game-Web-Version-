@@ -1,0 +1,48 @@
+.card-container {
+  width: 270px;
+  height: 180px;
+  perspective: 1600px;
+  position: relative;
+  cursor: pointer;
+  margin: 30px auto;
+}
+
+.card-sheet {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 16px;
+  border: 2px solid #ff2d95;
+  background: #111827;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 0.8s ease;
+  padding: 20px;
+}
+
+/* Rückseite */
+.card-front {
+  transform: rotateY(0deg);
+  background: linear-gradient(135deg, #0b0f1e, #1b1f3b);
+}
+
+/* Vorderseite */
+.card-back {
+  transform: rotateY(-180deg);
+}
+
+/* Wenn die Karte geöffnet wird */
+.card-container.open .card-front {
+  transform: rotateY(180deg);
+}
+.card-container.open .card-back {
+  transform: rotateY(0deg);
+}

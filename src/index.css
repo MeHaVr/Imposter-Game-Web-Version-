@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+.pulse-background {
+  background: radial-gradient(circle at 20% 20%, #ff2d9520, transparent 70%),
+    radial-gradient(circle at 80% 80%, #00c6ff15, transparent 70%),
+    linear-gradient(135deg, #0a0a0f 0%, #111827 100%);
+  background-size: 140% 140%;
+  animation: pulseGradient 10s ease-in-out infinite;
+  color: white;
+}
+
+@keyframes pulseGradient {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.1);
+  }
+}

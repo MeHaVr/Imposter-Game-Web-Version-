@@ -22,9 +22,12 @@ export const PlayerSelection = ({ onStartGame }: any) => {
     { value: 7, label: "7 Personen" },
   ];
 
-  const imposterNumber = [{ value: 1, label: "1 Imposter" }];
+  const imposterNumber = [
+    { value: 1, label: "1 Imposter" },
+    { value: 2, label: "2 Imposter" },
+    { value: 3, label: "3 Imposter" },
+  ];
 
-  // Spieleranzahl auswählen
   const handlePlayerChange = (option: any) => {
     setSelectedOptionPlayer(option);
     setNamesConfirmed(false);
@@ -40,7 +43,6 @@ export const PlayerSelection = ({ onStartGame }: any) => {
     setPlayerNames([]);
   };
 
-  // Name verändern
   const handleInputChange = (index: number, value: string) => {
     const updated = [...playerInputs];
     updated[index].text = value;
@@ -53,26 +55,22 @@ export const PlayerSelection = ({ onStartGame }: any) => {
     playerInputs.length > 0 &&
     playerInputs.every((p) => p.text.trim().length > 0);
 
-  // Namen bestätigen
   const handleConfirmNames = () => {
     if (!allNamesFilled) return;
     setNamesConfirmed(true);
   };
 
-  // Imposter auswählen (Random)
   const handleImposterSelect = (option: any) => {
     setSelectedOptionImposter(option);
     const randomIndex = Math.floor(Math.random() * playerNames.length);
     setImposter(randomIndex);
   };
 
-  // Spiel starten
   const handlePlay = () => {
     if (!allNamesFilled || imposter === null) return;
     onStartGame(playerNames, imposter);
   };
 
-  // react-select Styling
   const selectStyles = {
     control: (base: any) => ({
       ...base,
@@ -84,7 +82,6 @@ export const PlayerSelection = ({ onStartGame }: any) => {
     menu: (base: any) => ({
       ...base,
       backgroundColor: "#0A0A0F",
-      color: "white",
     }),
     option: (base: any, state: any) => ({
       ...base,
@@ -103,7 +100,6 @@ export const PlayerSelection = ({ onStartGame }: any) => {
 
   return (
     <div className="text-white mt-6 px-4">
-      {/* Spieleranzahl */}
       <span className="block mb-2 text-slate-300 text-lg">
         Wie viele Personen?
       </span>
@@ -115,7 +111,6 @@ export const PlayerSelection = ({ onStartGame }: any) => {
         styles={selectStyles}
       />
 
-      {/* Eingabefelder */}
       {playerInputs.length > 0 && (
         <div className="mt-6">
           <h2 className="text-xl mb-3 text-slate-200">Spieler Namen:</h2>
@@ -127,8 +122,8 @@ export const PlayerSelection = ({ onStartGame }: any) => {
               placeholder={`Spieler ${index + 1}`}
               className="
                 w-full mb-3 px-3 py-2 rounded-xl bg-[#111827]/70 text-white
-                border border-pink-400 shadow-[0_0_12px_rgba(255,45,149,0.5)]
-                placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500
+                border border-pink-400 shadow-lg placeholder-slate-500 
+                focus:outline-none focus:ring-2 focus:ring-pink-500
               "
               value={input.text}
               onChange={(e) => handleInputChange(index, e.target.value)}
@@ -139,7 +134,7 @@ export const PlayerSelection = ({ onStartGame }: any) => {
             <button
               className={`w-full mt-3 py-2 rounded-xl text-lg font-semibold ${
                 allNamesFilled
-                  ? "bg-pink-600 shadow-[0_0_12px_rgba(255,45,149,0.8)]"
+                  ? "bg-pink-600 shadow-lg"
                   : "bg-pink-900/40 opacity-50"
               }`}
               disabled={!allNamesFilled}
@@ -151,7 +146,6 @@ export const PlayerSelection = ({ onStartGame }: any) => {
         </div>
       )}
 
-      {/* Imposter Auswahl */}
       {namesConfirmed && (
         <>
           <span className="block mt-6 mb-2 text-slate-300 text-lg">
@@ -166,7 +160,7 @@ export const PlayerSelection = ({ onStartGame }: any) => {
           />
 
           <button
-            className="w-full mt-3 py-2 rounded-xl text-lg font-semibold bg-pink-600 shadow-[0_0_12px_rgba(255,45,149,0.8)]"
+            className="w-full mt-3 py-2 rounded-xl text-lg font-semibold bg-pink-600 shadow-lg"
             onClick={handlePlay}
             disabled={!allNamesFilled || imposter === null}
           >

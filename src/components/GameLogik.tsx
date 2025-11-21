@@ -4,26 +4,22 @@ import { PlayerRevealPage } from "./PlayerRevealPage";
 import { getRandomWord } from "./WordsList";
 
 export const GameLogik = () => {
-  // Schritt: Auswahl, Reveal, Ende
   const [step, setStep] = useState<"select" | "reveal" | "done">("select");
 
-  // Daten
   const [players, setPlayers] = useState<string[]>([]);
   const [imposter, setImposter] = useState<number | null>(null);
   const [word, setWord] = useState<any>(null);
 
-  // Wer ist gerade dran?
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
 
-  // Wird aufgerufen wenn Spiel gestartet wird
   const startGame = (names: string[], imposterIndex: number) => {
     setPlayers(names);
     setImposter(imposterIndex);
     setWord(getRandomWord());
+    setCurrentPlayerIndex(0);
     setStep("reveal");
   };
 
-  // Nächster Spieler
   const nextPlayer = () => {
     if (currentPlayerIndex + 1 >= players.length) {
       setStep("done");
@@ -32,12 +28,18 @@ export const GameLogik = () => {
     setCurrentPlayerIndex(currentPlayerIndex + 1);
   };
 
-  // Auswahl-Screen
+  const restartGame = () => {
+    setPlayers([]);
+    setImposter(null);
+    setWord(null);
+    setCurrentPlayerIndex(0);
+    setStep("select");
+  };
+
   if (step === "select") {
     return <PlayerSelection onStartGame={startGame} />;
   }
 
-  // Reveal-Screen
   if (step === "reveal") {
     return (
       <PlayerRevealPage
@@ -46,15 +48,28 @@ export const GameLogik = () => {
         word={word.word}
         hint={word.hint}
         onNext={nextPlayer}
+        playerIndex={currentPlayerIndex}
       />
     );
   }
 
-  // Spiel fertig
   return (
     <div className="text-white text-center p-6">
-      <h1 className="text-4xl font-bold mb-4">Alle Spieler waren dran! 🎉</h1>
-      <p className="text-xl">Jetzt kann die Diskussion starten…</p>
+      <h1 className="text-4xl font-bold mb-4">Alle Spieler waren dran 🎉</h1>
+
+      <p className="text-xl mb-6">
+        Der Imposter war:{" "}
+        <span className="text-pink-400 font-bold">
+          {imposter !== null ? players[imposter] : "?"}
+        </span>
+      </p>
+
+      <button
+        onClick={restartGame}
+        className="mt-6 px-6 py-3 bg-pink-600 rounded-xl text-lg shadow-lg hover:bg-pink-700 transition"
+      >
+        🔁 Neues Spiel starten
+      </button>
     </div>
   );
 };

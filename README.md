@@ -1,73 +1,42 @@
-# React + TypeScript + Vite
+# 🎭 Imposter Game – Web Version (Vibe Coding Project)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dieses Projekt ist ein **Vibe-Coding-Projekt**, das nicht von mir selbst stammt.  
+Die komplette Logik, das Design, der Code (inkl. Poker-Karten-Style, Card-Flip-Animation, GameFlow usw.)  
+wurde **vollständig von ChatGPT generiert**, als Teil eines Lern- und Experimentierprojekts.
 
-Currently, two official plugins are available:
+Ich nutze dieses Repository nur, um:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Programmieren zu üben
+- moderne Frontend-Techniken auszuprobieren
+- ein eigenes kleines Spielprojekt zu hosten
+- React, TypeScript & UI-Animationen zu lernen
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🧩 Features
 
-## Expanding the ESLint configuration
+- 🎴 **Poker-Karten Design** (richtiges Casino-Look mit Rückseite & Vorderseite)
+- 🔄 **Flip/Blätter-Effekt** für geheime Wörter
+- 🕵️ **Zufälliger Imposter**
+- 🔐 Spieler sehen ihr Wort erst nach Umblättern
+- ➡️ Weiter-Button für jeden Spieler
+- 🏁 Am Ende wird **der Imposter angezeigt**
+- 🔁 Restart mit vollständigem Reset
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ⚡ Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **React + TypeScript**
+- **React-Select**
+- **Custom CSS Animations**
+- **State Machine (select → reveal → done)**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Starten
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```

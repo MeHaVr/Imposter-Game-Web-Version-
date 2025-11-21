@@ -3,22 +3,30 @@ import React, { useState } from "react";
 export const ClassicCard = ({
   hiddenText,
   revealText,
-}: {
-  hiddenText: string;
-  revealText: string;
-}) => {
+  suit = "♠",
+  onFlip, // <--- NEU
+}: any) => {
   const [open, setOpen] = useState(false);
 
-  return (
-    <div
-      className={`card-container ${open ? "open" : ""}`}
-      onClick={() => setOpen(!open)}
-    >
-      {/* Rückseite */}
-      <div className="card-sheet card-front">{hiddenText}</div>
+  const isRed = suit === "♥" || suit === "♦";
+  const fontColor = isRed ? "#c4001d" : "#1a1a1a";
 
-      {/* Vorderseite */}
-      <div className="card-sheet card-back">{revealText}</div>
+  const flipCard = () => {
+    const newState = !open;
+    setOpen(newState);
+
+    if (newState && onFlip) onFlip(); // <--- Callback wenn Flip passiert
+  };
+
+  return (
+    <div className={`card-container ${open ? "open" : ""}`} onClick={flipCard}>
+      <div className="card-sheet card-front"></div>
+
+      <div className="card-sheet card-back" style={{ color: fontColor }}>
+        <div style={{ fontSize: "2.6rem", marginBottom: "10px" }}>{suit}</div>
+        <div>{revealText}</div>
+        <div style={{ fontSize: "2.6rem", marginTop: "10px" }}>{suit}</div>
+      </div>
     </div>
   );
 };

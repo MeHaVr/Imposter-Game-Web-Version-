@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import Game from "./components/Game";
 import SettingsMenu from "./components/SettingsMenu";
 
-export type WordEntry = { word: string; tip: string };
+import JavascriptTimeAgo from "javascript-time-ago";
+import de from "javascript-time-ago/locale/de";
+
+JavascriptTimeAgo.addDefaultLocale(de);
+
+export type WordEntry = { word: string; tip: string; id: string };
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -13,7 +18,7 @@ function App() {
   const [timerSeconds, setTimerSeconds] = useState(60);
   const [tipMode, setTipMode] = useState(false);
 
-  // ✅ Custom word list
+  const [language, setlanguage] = useState("de-DE");
   const [customWords, setCustomWords] = useState<WordEntry[]>([]);
 
   // ✅ Load from localStorage once
@@ -52,6 +57,8 @@ function App() {
         disabled={isGameActive}
         isTimeMode={isTimeMode}
         setIsTimeMode={setIsTimeMode}
+        language={language}
+        setlanguage={setlanguage}
       />
 
       <div className="flex justify-center items-center h-screen">

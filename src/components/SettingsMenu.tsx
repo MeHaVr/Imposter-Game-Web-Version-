@@ -65,8 +65,7 @@ function SettingsMenu({
 
   const MAX_VISIBLE_WORDSETS = 5;
   const backend = import.meta.env.VITE_BACKEND;
-  const port = import.meta.env.VITE_BACKEND_PORT;
-  const EndPoint = `${backend}:${port}`;
+  const EndPoint = `${backend}`;
 
   useEffect(() => {
     if (!open) return;

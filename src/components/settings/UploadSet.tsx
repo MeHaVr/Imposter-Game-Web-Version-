@@ -13,8 +13,7 @@ type UploadSetProps = {
   onCloseSettings?: () => void;
 };
 const backend = import.meta.env.VITE_BACKEND;
-const port = import.meta.env.VITE_BACKEND_PORT;
-const ENDPOINT = `${backend}:${port}`;
+const ENDPOINT = `${backend}`;
 const PREVIEW_LIMIT = 6;
 const PREVIEW_SCROLL_MAX_H = "max-h-56";
 

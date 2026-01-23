@@ -5,6 +5,14 @@ import ReactTimeAgo from "react-time-ago";
 
 import type { WordSetListItem, WordSetDetail } from "../types/WordsSets";
 
+import Select from "react-select";
+import selectClassNames from "../style/selectClassNames";
+import { languageOptions } from "../types/Options";
+import type { LanguageOption } from "../types/Options";
+import type { UploadWord } from "../types/Options";
+import { Spoiler } from "spoiled";
+import UploadSet from "./settings/UploadSet";
+
 type SettingsMenuProps = {
   open: boolean;
   onToggle: () => void;
@@ -53,12 +61,19 @@ function SettingsMenu({
 }: SettingsMenuProps) {
   const [wordInput, setWordInput] = useState("");
   const [tipInput, setTipInput] = useState("");
-
+  const [privatCode, setPrivatCode] = useState("");
   const [wordSets, setWordSets] = useState<WordSetListItem[]>([]);
   const [activeSetId, setActiveSetId] = useState<string | null>(null);
+  const [isRedeeming, setIsRedeeming] = useState(false);
+  const [redeemError, setRedeemError] = useState<string | null>(null);
+  const MAX_VISIBLE_WORDSETS = 5;
+  const [showAllWordSets, setShowAllWordSets] = useState(false);
 
-  // Local toggle for game master helper
-  const [isImposterWordVisible, setIsImposterWordVisible] = useState(false);
+  // "true" = show real words; "false" = hide with spoiler
+  const [isImposterWordVisible, setIsImposterWordVisible] = useState(true);
+
+  // Upload popup
+  const [showUploadSet, setShowUploadSet] = useState(false);
 
   // Close on ESC
   useEffect(() => {
@@ -69,6 +84,16 @@ function SettingsMenu({
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, onClose]);
+
+  // Prevent background scroll while open
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   const cleaned = useMemo(() => {
     const word = wordInput.trim();
@@ -114,7 +139,7 @@ function SettingsMenu({
   const addWordsFromSet = async (id: string) => {
     try {
       const response = await axios.get<WordSetDetail>(
-        `http://localhost:4000/word-sets/${id}`,
+        `http://localhost:4000/api/word-sets/${id}`,
       );
       const wordSet = response.data;
 
@@ -137,14 +162,13 @@ function SettingsMenu({
     }
   };
 
-  // Fetch word sets from server (only when menu opens)
+  // Fetch word sets (only when menu opens)
   useEffect(() => {
     if (!open) return;
-
     (async () => {
       try {
         const response = await axios.get<WordSetListItem[]>(
-          "http://localhost:4000/word-sets",
+          "http://localhost:4000/api/word-sets",
         );
         setWordSets(response.data);
       } catch (error) {
@@ -152,6 +176,42 @@ function SettingsMenu({
       }
     })();
   }, [open]);
+
+  const visibleWordSets = showAllWordSets
+    ? wordSets
+    : wordSets.slice(0, MAX_VISIBLE_WORDSETS);
+
+  const redeemPrivatCode = async () => {
+    if (privatCode.length !== 5 || isRedeeming) return;
+
+    setIsRedeeming(true);
+    setRedeemError(null);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/word-sets/privat/redeem/",
+        { privatCode },
+      );
+
+      const set = res.data?.set;
+      if (!set || !Array.isArray(set.words)) {
+        throw new Error("Invalid backend response");
+      }
+
+      const newWords = set.words.map((w: any) => ({
+        id: crypto.randomUUID(),
+        word: w.word,
+        tip: w.tips?.[0] ?? "",
+        sourceSetId: set.id,
+      }));
+
+      setCustomWords(newWords as WordEntry[]);
+    } catch (err: any) {
+      setRedeemError(err?.response?.data?.error ?? "Einlösen fehlgeschlagen.");
+    } finally {
+      setIsRedeeming(false);
+    }
+  };
 
   return (
     <>
@@ -162,11 +222,10 @@ function SettingsMenu({
         disabled={disabled}
         className="
           fixed top-5 right-5 z-50 pointer-events-auto
-          h-11 w-11 rounded-xl
-          border border-white/10 bg-white/5 backdrop-blur-md
-          shadow-lg shadow-black/20
-          flex items-center justify-center
-          transition hover:bg-white/10 hover:border-white/20
+          h-11 w-11 rounded-xl border border-white/10 bg-white/5
+          backdrop-blur-md shadow-lg shadow-black/20
+          flex items-center justify-center transition
+          hover:bg-white/10 hover:border-white/20
           active:scale-[0.98]
           focus:outline-none focus:ring-2 focus:ring-blue-500/60
         "
@@ -190,18 +249,21 @@ function SettingsMenu({
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      {/* Drawer */}
+      {/* Drawer (mobile-friendly + scrollable content) */}
       <aside
         className={`
-          fixed top-0 right-0 z-50 h-full w-[400px]
-          border-l border-white/10 bg-neutral-950/70 backdrop-blur-md
-          shadow-2xl shadow-black/40
+          fixed top-0 right-0 z-50 h-dvh
+          w-full sm:w-[400px]
+          border-l border-white/10 bg-neutral-950/70
+          backdrop-blur-md shadow-2xl shadow-black/40
           transition-transform duration-200
           ${open ? "translate-x-0" : "translate-x-full"}
+          flex flex-col
         `}
         aria-hidden={!open}
       >
-        <div className="p-5 flex items-center justify-between">
+        {/* Header */}
+        <div className="p-5 flex items-center justify-between shrink-0 border-b border-white/10">
           <div className="text-sm font-semibold uppercase tracking-widest text-white/60">
             Settings
           </div>
@@ -210,12 +272,9 @@ function SettingsMenu({
             type="button"
             onClick={onClose}
             className="
-              h-9 w-9 rounded-xl
-              border border-white/10 bg-white/5
-              transition hover:bg-white/10 hover:border-white/20
-              active:scale-[0.98]
-              focus:outline-none focus:ring-2 focus:ring-blue-500/60
-              text-white/80
+              h-9 w-9 rounded-xl border border-white/10 bg-white/5 transition
+              hover:bg-white/10 hover:border-white/20 active:scale-[0.98]
+              focus:outline-none focus:ring-2 focus:ring-blue-500/60 text-white/80
             "
             aria-label="Close settings"
           >
@@ -223,24 +282,35 @@ function SettingsMenu({
           </button>
         </div>
 
-        <div className="px-5 pb-6 space-y-5">
-          {/* Language (so setlanguage is used, no lint error) */}
+        {/* Scroll area */}
+        <div
+          className="
+            px-5 pt-5 pb-6 space-y-5
+            overflow-y-auto overscroll-contain flex-1
+            [scrollbar-gutter:stable]
+          "
+          style={{
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 24px)",
+          }}
+        >
+          {/* Sprache */}
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <div className="text-xs font-semibold uppercase tracking-widest text-white/50 mb-2">
               Sprache
             </div>
-            <select
-              value={language}
-              onChange={(e) => setlanguage(e.target.value)}
-              className="
-                w-full rounded-lg bg-white/10 px-3 py-2 text-sm text-white
-                outline-none transition
-                focus:bg-white/15 focus:ring-2 focus:ring-blue-500/60
-              "
-            >
-              <option value="de">Deutsch</option>
-              <option value="en">English</option>
-            </select>
+
+            <Select<LanguageOption, false>
+              options={languageOptions}
+              isSearchable={false}
+              isClearable={false}
+              unstyled
+              classNames={selectClassNames}
+              value={languageOptions.find((o) => o.value === language) ?? null}
+              onChange={(selected) => {
+                if (!selected) return;
+                setlanguage(selected.value);
+              }}
+            />
           </div>
 
           {/* Timer toggle */}
@@ -326,19 +396,21 @@ function SettingsMenu({
             </div>
           </div>
 
-          {/* ✅ FIXED: Imposter Wörter Anzeigen block (JSX nesting was broken) */}
+          {/* Imposter Wörter Anzeigen */}
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-widest text-white/50">
                   Imposter Wörter anzeigen?
                 </div>
-                <div className="text-xs text-white/40 mt-1">Text</div>
+                <div className="text-xs text-white/40 mt-1">
+                  Blendet Wörter & Tipps in der Liste ein/aus.
+                </div>
               </div>
 
               <button
                 type="button"
-                onClick={() => setIsImposterWordVisible(!isImposterWordVisible)}
+                onClick={() => setIsImposterWordVisible((v) => !v)}
                 className={`
                   relative h-8 w-14 rounded-full border transition
                   ${isImposterWordVisible ? "bg-blue-500/60 border-blue-500/40" : "bg-white/10 border-white/15"}
@@ -407,15 +479,31 @@ function SettingsMenu({
                 (customWords as WordEntryWithSource[]).map((w) => (
                   <div
                     key={(w as any).id ?? w.word}
-                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 flex items-start justify-between gap-3"
+                    className="
+                      rounded-lg border border-white/10 bg-white/5
+                      px-3 py-2 flex items-start justify-between gap-3
+                    "
                   >
                     <div className="min-w-0">
                       <div className="text-sm font-semibold text-white truncate">
-                        {isImposterWordVisible ? w.word : "•••••"}
+                        <Spoiler
+                          hidden={!isImposterWordVisible}
+                          mimicWords={false}
+                        >
+                          {w.word}
+                        </Spoiler>
                       </div>
+
                       <div className="text-xs text-white/50 truncate">
-                        Tipp: {w.tip}
+                        Tipp:{" "}
+                        <Spoiler
+                          hidden={!isImposterWordVisible}
+                          mimicWords={false}
+                        >
+                          {w.tip}
+                        </Spoiler>
                       </div>
+
                       {(w as WordEntryWithSource).sourceSetId && (
                         <div className="text-[10px] text-white/35 truncate">
                           Quelle: Set
@@ -428,8 +516,8 @@ function SettingsMenu({
                       onClick={() => removeWord(w.word)}
                       className="
                         shrink-0 rounded-md px-2 py-1 text-xs font-semibold
-                        bg-white/10 border border-white/10
-                        hover:bg-white/20 hover:border-white/20 transition
+                        bg-white/10 border border-white/10 hover:bg-white/20
+                        hover:border-white/20 transition
                         focus:outline-none focus:ring-2 focus:ring-blue-500/60
                       "
                     >
@@ -441,44 +529,62 @@ function SettingsMenu({
             </div>
 
             {customWords.length > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  setCustomWords([]);
-                  setActiveSetId(null);
-                }}
-                className="
-                  mt-3 w-full rounded-lg px-4 py-2 text-xs font-semibold
-                  bg-white/10 border border-white/10
-                  hover:bg-white/20 hover:border-white/20 transition
-                  focus:outline-none focus:ring-2 focus:ring-blue-500/60
-                "
-              >
-                Alle löschen
-              </button>
+              <div className="mt-3 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCustomWords([]);
+                    setActiveSetId(null);
+                  }}
+                  className="
+                    w-full rounded-lg px-4 py-2 text-xs font-semibold
+                    bg-white/10 border border-white/10 hover:bg-white/20
+                    hover:border-white/20 transition
+                    focus:outline-none focus:ring-2 focus:ring-blue-500/60
+                  "
+                >
+                  Alle löschen
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowUploadSet(true)}
+                  className="
+                    w-full rounded-lg px-4 py-2 text-xs font-semibold
+                    bg-white/10 border border-white/10 hover:bg-white/20
+                    hover:border-white/20 transition
+                    focus:outline-none focus:ring-2 focus:ring-blue-500/60
+                  "
+                >
+                  Set hochladen
+                </button>
+              </div>
             )}
           </div>
 
           {/* Word Sets from Backend */}
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <div className="text-xs font-semibold uppercase tracking-widest text-white/50 mb-3">
-              Wörter Set zum Benutzen
+              Wörter Sets
             </div>
             <div className="text-xs text-white/40 mt-1">
-              Du kannst Wörter-Sets vom Backend auswählen und deren Wörter zu
-              deinen Custom Words hinzufügen.
+              Wähle ein Set aus, um dessen Wörter zu deinen Custom Words
+              hinzuzufügen.
             </div>
 
-            <div className="mt-4 space-y-2 max-h-44 overflow-auto pr-1">
+            <div className="mt-4 space-y-2 pr-1">
               {wordSets.length === 0 ? (
                 <div className="text-xs text-white/40">
                   Keine Wörter Sets verfügbar.
                 </div>
               ) : (
-                wordSets.map((w) => (
+                visibleWordSets.map((w) => (
                   <div
                     key={w.id}
-                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 flex items-start justify-between gap-3"
+                    className="
+                      rounded-lg border border-white/10 bg-white/5
+                      px-3 py-2 flex items-start justify-between gap-3
+                    "
                   >
                     <div className="min-w-0">
                       <div className="text-sm font-semibold text-white truncate">
@@ -502,8 +608,8 @@ function SettingsMenu({
                         onClick={() => removeWordsFromSet(w.id)}
                         className="
                           shrink-0 rounded-md px-2 py-1 text-xs font-semibold
-                          bg-white/10 border border-white/10
-                          hover:bg-white/20 hover:border-white/20 transition
+                          bg-white/10 border border-white/10 hover:bg-white/20
+                          hover:border-white/20 transition
                           focus:outline-none focus:ring-2 focus:ring-blue-500/60
                         "
                       >
@@ -515,8 +621,8 @@ function SettingsMenu({
                         onClick={() => addWordsFromSet(w.id)}
                         className="
                           shrink-0 rounded-md px-2 py-1 text-xs font-semibold
-                          bg-white/10 border border-white/10
-                          hover:bg-white/20 hover:border-white/20 transition
+                          bg-white/10 border border-white/10 hover:bg-white/20
+                          hover:border-white/20 transition
                           focus:outline-none focus:ring-2 focus:ring-blue-500/60
                         "
                       >
@@ -527,9 +633,90 @@ function SettingsMenu({
                 ))
               )}
             </div>
+
+            {/* Mehr / Weniger */}
+            {wordSets.length > MAX_VISIBLE_WORDSETS && (
+              <button
+                type="button"
+                onClick={() => setShowAllWordSets((v) => !v)}
+                className="
+                  mt-3 w-full rounded-lg px-4 py-2 text-xs font-semibold
+                  bg-white/10 border border-white/10
+                  hover:bg-white/20 hover:border-white/20 transition
+                  focus:outline-none focus:ring-2 focus:ring-blue-500/60
+                "
+              >
+                {showAllWordSets
+                  ? "Weniger anzeigen"
+                  : `Noch ${wordSets.length - MAX_VISIBLE_WORDSETS} anzeigen`}
+              </button>
+            )}
+          </div>
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-semibold uppercase tracking-widest text-white/50 mb-2">
+              Privat-Code (5-stellig)
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                placeholder="5-stelliger Code"
+                value={privatCode}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "").slice(0, 5);
+                  setPrivatCode(value);
+                  setRedeemError(null);
+                }}
+                className={`
+        w-full rounded-lg px-4 py-3 text-sm text-white
+        bg-white/10 placeholder:text-white/40
+        outline-none transition
+        focus:bg-white/15 focus:ring-2
+        ${redeemError ? "ring-2 ring-red-500/50 focus:ring-red-500/60" : "focus:ring-blue-500/60"}
+      `}
+              />
+
+              <button
+                type="button"
+                disabled={privatCode.length !== 5 || isRedeeming}
+                onClick={redeemPrivatCode}
+                className={`
+    shrink-0 rounded-lg px-4 py-3 text-sm font-semibold transition
+    ${
+      privatCode.length !== 5 || isRedeeming
+        ? "bg-gray-500/40 text-white/70 cursor-not-allowed"
+        : "bg-blue-500/80 hover:bg-blue-500 text-white"
+    }
+    focus:outline-none focus:ring-2 focus:ring-blue-500/60
+  `}
+              >
+                {isRedeeming ? "..." : "Einlösen"}
+              </button>
+            </div>
+
+            <div className="mt-2 text-xs">
+              {redeemError ? (
+                <span className="text-red-300">{redeemError}</span>
+              ) : (
+                <span className="text-white/40">
+                  Gib deinen 5-stelligen Code ein und klicke auf Einlösen.
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </aside>
+
+      {/* ✅ UploadSet Popup */}
+      <UploadSet
+        open={showUploadSet}
+        onClose={() => setShowUploadSet(false)}
+        words={(customWords as WordEntryWithSource[]).map<UploadWord>((w) => ({
+          word: w.word,
+          tips: [w.tip].filter(Boolean),
+        }))}
+      />
     </>
   );
 }

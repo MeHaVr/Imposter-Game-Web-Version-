@@ -51,7 +51,7 @@ function Game({
 
   // Imposters by index
   const [imposterIndexes, setImposterIndexes] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
 
   const CrewOptions: Option[] = [
@@ -92,7 +92,7 @@ function Game({
     setPlayerNames((prev) =>
       prev
         .slice(0, crewCount)
-        .concat(Array(Math.max(0, crewCount - prev.length)).fill(""))
+        .concat(Array(Math.max(0, crewCount - prev.length)).fill("")),
     );
   }, [crewCount]);
 
@@ -111,7 +111,7 @@ function Game({
     () =>
       playerNames.length === crewCount &&
       playerNames.every((n) => n.trim().length > 0),
-    [playerNames, crewCount]
+    [playerNames, crewCount],
   );
 
   const canStart = !!crew && !!imposters && allNamesFilled;
@@ -124,13 +124,13 @@ function Game({
       if (typeof w?.tip === "string")
         return { word: String(w.word), tips: [w.tip] };
       return { word: String(w?.word ?? "word"), tips: ["hint"] };
-    }
+    },
   );
 
   /* ================= START SCREEN ================= */
   if (gameState === "Start") {
     return (
-      <div className="flex flex-col items-center text-black">
+      <div className="flex flex-col items-center text-black mx-5">
         <h3 className="text-xl font-bold mb-4 text-white">
           Select Game Options
         </h3>
@@ -153,6 +153,8 @@ function Game({
                 setCrew(selected);
                 setCrewCount(Number(selected?.value));
               }}
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
             />
           </div>
 
@@ -174,10 +176,11 @@ function Game({
                   setImposters(selected);
                   setImposterCount(Number(selected?.value));
                 }}
+                menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
               />
             </div>
           )}
-
           {/* Player names */}
           {crew && imposters && (
             <div className="space-y-2">
@@ -213,7 +216,7 @@ function Game({
           onClick={() => {
             const imposterIdx = pickRandomIndexes(
               playerNames.length,
-              imposterCount
+              imposterCount,
             );
 
             const entry = RandomWordEntry(safeCustomWords);
@@ -242,7 +245,7 @@ function Game({
     const isImposter = imposterIndexes.has(currentPlayerIndex);
 
     // ✅ FIX: Imposter ALWAYS sees "IMPOSTER"
-    const wordForPlayer = isImposter ? "IMPOSTER" : wordEntry?.word ?? "";
+    const wordForPlayer = isImposter ? "IMPOSTER" : (wordEntry?.word ?? "");
 
     return (
       <div className="text-white flex flex-col items-center gap-6">
@@ -390,7 +393,7 @@ function Game({
                 <li key={index} className="font-semibold text-red-400">
                   {name}
                 </li>
-              ) : null
+              ) : null,
             )}
           </ul>
         </div>

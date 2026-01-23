@@ -28,8 +28,8 @@ const selectClassNames = {
        state.isSelected
          ? "bg-blue-500/30"
          : state.isFocused
-         ? "bg-white/10"
-         : ""
+           ? "bg-white/10"
+           : ""
      }
     `,
 };

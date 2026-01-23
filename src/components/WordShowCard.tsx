@@ -4,7 +4,6 @@ type WordShowCardProps = {
   onToggle: () => void;
   onBack: () => void;
 
-  // optional
   isTipword?: boolean;
   tipWord?: string;
   isEndScreen?: boolean;
@@ -14,7 +13,6 @@ function WordShowCard({
   isVisible,
   word,
   onToggle,
-  onBack,
   isTipword = false,
   tipWord = "",
   isEndScreen = false,
@@ -54,7 +52,6 @@ function WordShowCard({
                 {word}
               </div>
 
-              {/* ✅ Tip nur wenn aktiv */}
               {isTipword && tipWord && (
                 <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white/80">
                   <span className="font-semibold tracking-wide">TIPP</span>

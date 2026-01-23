@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Game from "./components/Game";
 import SettingsMenu from "./components/SettingsMenu";
-
+import Alerts from "./components/alerts";
 import JavascriptTimeAgo from "javascript-time-ago";
 import de from "javascript-time-ago/locale/de";
 
@@ -21,22 +21,42 @@ function App() {
   const [language, setlanguage] = useState("de-DE");
   const [customWords, setCustomWords] = useState<WordEntry[]>([]);
 
-  // ✅ Load from localStorage once
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<
+    "success" | "error" | "info" | "warning" | null
+  >(null);
+  const [isError, setIsError] = useState(false);
+
+  // LocalStorage laden beim ersten Render
   useEffect(() => {
     try {
       const raw = localStorage.getItem("imposter_custom_words");
       if (!raw) return;
       const parsed = JSON.parse(raw) as WordEntry[];
       if (Array.isArray(parsed)) setCustomWords(parsed);
-    } catch {
-      // ignore broken storage
+    } catch (error) {
+      console.error("Fehler beim Laden vom LocalStorage:", error);
     }
   }, []);
 
-  // ✅ Save to localStorage whenever it changes
+  // LocalStorage speichern bei Änderungen
   useEffect(() => {
-    localStorage.setItem("imposter_custom_words", JSON.stringify(customWords));
+    try {
+      localStorage.setItem(
+        "imposter_custom_words",
+        JSON.stringify(customWords),
+      );
+    } catch (error) {
+      console.error("Fehler beim Speichern im LocalStorage:", error);
+    }
   }, [customWords]);
+
+  // Alert automatisch schließen
+  const handleCloseAlert = () => {
+    setIsError(false);
+    setErrorMsg(null);
+    setErrorType(null);
+  };
 
   return (
     <div className="pulse-background fixed inset-0 w-full min-h-screen">
@@ -55,7 +75,19 @@ function App() {
         setIsTimeMode={setIsTimeMode}
         language={language}
         setlanguage={setlanguage}
+        setErrorMsg={setErrorMsg}
+        setIsError={setIsError}
+        setErrorType={setErrorType}
       />
+
+      {isError && errorMsg && (
+        <Alerts
+          message={errorMsg}
+          active={isError}
+          type={errorType}
+          onClose={handleCloseAlert}
+        />
+      )}
 
       <div className="flex justify-center items-center h-screen">
         <Game

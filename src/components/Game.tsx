@@ -64,12 +64,10 @@ function Game({
     { value: "9", label: "9 Mitspieler" },
   ];
 
-  // ✅ never set state during render
   useEffect(() => {
     setGameisActive?.(gameState !== "Start");
   }, [gameState, setGameisActive]);
 
-  // Imposter options abhängig von crewCount
   useEffect(() => {
     if (crewCount <= 3) {
       setImposterOptions([{ value: "1", label: "1 Imposter" }]);
@@ -87,7 +85,6 @@ function Game({
     }
   }, [crewCount]);
 
-  // Player names Array auf crewCount-Länge halten
   useEffect(() => {
     setPlayerNames((prev) =>
       prev
@@ -96,7 +93,6 @@ function Game({
     );
   }, [crewCount]);
 
-  // Wenn aktuelle Imposter-Auswahl nicht mehr erlaubt ist -> reset
   useEffect(() => {
     if (
       imposters &&
@@ -116,7 +112,6 @@ function Game({
 
   const canStart = !!crew && !!imposters && allNamesFilled;
 
-  // ✅ convert customWords (WordEntry[] or WordsType[]) => WordsType[]
   const safeCustomWords: WordsType[] | undefined = (customWords as any)?.map(
     (w: any) => {
       if (Array.isArray(w?.tips))

@@ -64,6 +64,9 @@ function SettingsMenu({
   const [showUploadSet, setShowUploadSet] = useState(false);
 
   const MAX_VISIBLE_WORDSETS = 5;
+  const backend = import.meta.env.VITE_BACKEND;
+  const port = import.meta.env.VITE_BACKEND_PORT;
+  const EndPoint = `${backend}:${port}`;
 
   useEffect(() => {
     if (!open) return;
@@ -82,6 +85,33 @@ function SettingsMenu({
       document.body.style.overflow = prev;
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const fetchWordSets = async () => {
+      try {
+        const response = await axios.get<WordSetListItem[]>(
+          `${EndPoint}/api/word-sets`,
+        );
+        setWordSets(response.data);
+      } catch (error) {
+        console.error("Error fetching word sets:", error);
+        setErrorMsg("Fehler beim Laden der Word Sets.");
+        setIsError(true);
+        setErrorType("error");
+      }
+    };
+
+    fetchWordSets();
+  }, [open, setErrorMsg, setIsError, setErrorType]);
+
+  const AlertOpeningSettingsMidGame = () => {
+    setErrorMsg("Die Einstellungen lassen sich nicht im Spiel öffnen.");
+    setIsError(true);
+    setErrorType("warning");
+    console.log("Die Einstellungen lassen sich nicht im Spiel öffnen.");
+  };
 
   const cleaned = useMemo(() => {
     const word = wordInput.trim();
@@ -126,7 +156,7 @@ function SettingsMenu({
   const addWordsFromSet = async (id: string) => {
     try {
       const response = await axios.get<WordSetDetail>(
-        `http://localhost:4000/api/word-sets/${id}`,
+        `${EndPoint}/api/word-sets/${id}`,
       );
       const wordSet = response.data;
 
@@ -151,26 +181,6 @@ function SettingsMenu({
     }
   };
 
-  useEffect(() => {
-    if (!open) return;
-
-    const fetchWordSets = async () => {
-      try {
-        const response = await axios.get<WordSetListItem[]>(
-          "http://localhost:4000/api/word-sets",
-        );
-        setWordSets(response.data);
-      } catch (error) {
-        console.error("Error fetching word sets:", error);
-        setErrorMsg("Fehler beim Laden der Word Sets.");
-        setIsError(true);
-        setErrorType("error");
-      }
-    };
-
-    fetchWordSets();
-  }, [open, setErrorMsg, setIsError, setErrorType]);
-
   const visibleWordSets = showAllWordSets
     ? wordSets
     : wordSets.slice(0, MAX_VISIBLE_WORDSETS);
@@ -182,10 +192,9 @@ function SettingsMenu({
     setRedeemError(null);
 
     try {
-      const res = await axios.post(
-        "http://localhost:4000/api/word-sets/privat/redeem/",
-        { privatCode },
-      );
+      const res = await axios.post(`${EndPoint}/api/word-sets/privat/redeem/`, {
+        privatCode,
+      });
 
       const set = res.data?.set;
       if (!set || !Array.isArray(set.words)) {
@@ -220,8 +229,7 @@ function SettingsMenu({
     <>
       <button
         type="button"
-        onClick={disabled ? undefined : onToggle}
-        disabled={disabled}
+        onClick={disabled ? AlertOpeningSettingsMidGame : onToggle}
         className="fixed top-5 right-5 z-50 pointer-events-auto h-11 w-11 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md shadow-lg shadow-black/20 flex items-center justify-center transition hover:bg-white/10 hover:border-white/20 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-500/60"
         aria-label={open ? "Close settings" : "Open settings"}
       >

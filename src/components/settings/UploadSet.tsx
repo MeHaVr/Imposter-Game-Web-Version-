@@ -12,8 +12,9 @@ type UploadSetProps = {
   SetErrorType: (type: "success" | "error" | "info" | "warning" | null) => void;
   onCloseSettings?: () => void;
 };
-
-const ENDPOINT = "http://localhost:4000/api/new-word-set";
+const backend = import.meta.env.VITE_BACKEND;
+const port = import.meta.env.VITE_BACKEND_PORT;
+const ENDPOINT = `${backend}:${port}`;
 const PREVIEW_LIMIT = 6;
 const PREVIEW_SCROLL_MAX_H = "max-h-56";
 
@@ -137,7 +138,9 @@ function UploadSet({
     setIsSubmitting(true);
 
     try {
-      const endpoint = isPrivat ? `${ENDPOINT}/privat` : ENDPOINT;
+      const endpoint = isPrivat
+        ? `${ENDPOINT}/api/new-word-set/privat`
+        : ENDPOINT + "/api/new-word-set";
       const params: any = {
         title: title.trim(),
         desc: desc.trim(),
@@ -147,14 +150,17 @@ function UploadSet({
         params.privatCode = privatSetCode;
       }
 
-      await axios.post(endpoint, { words: localWords }, { params });
+      await axios.post(
+        endpoint + "/api/new-word-set",
+        { words: localWords },
+        { params },
+      );
 
       SetErrorMsg("✅ Set wurde hochgeladen! Warte bis es jemand akzeptiert.");
       SetIsError(true);
       SetErrorType("success");
       onSuccess?.();
 
-      // Schließe beide Fenster nach erfolgreichem Upload
       setTimeout(() => {
         onClose();
         onCloseSettings?.();

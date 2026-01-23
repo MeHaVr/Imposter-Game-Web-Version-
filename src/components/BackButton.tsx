@@ -14,7 +14,7 @@ export default function BackButton({
       type="button"
       onClick={onClick}
       className={`
-        fixed top-5 left-5 z-50
+        fixed top-5 left-5 z-10
         h-11 px-4 rounded-xl
         border border-white/10 bg-white/5 backdrop-blur-md
         shadow-lg shadow-black/20

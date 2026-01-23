@@ -27,7 +27,6 @@ function App() {
   >(null);
   const [isError, setIsError] = useState(false);
 
-  // LocalStorage laden beim ersten Render
   useEffect(() => {
     try {
       const raw = localStorage.getItem("imposter_custom_words");
@@ -39,7 +38,6 @@ function App() {
     }
   }, []);
 
-  // LocalStorage speichern bei Änderungen
   useEffect(() => {
     try {
       localStorage.setItem(
@@ -51,7 +49,6 @@ function App() {
     }
   }, [customWords]);
 
-  // Alert automatisch schließen
   const handleCloseAlert = () => {
     setIsError(false);
     setErrorMsg(null);

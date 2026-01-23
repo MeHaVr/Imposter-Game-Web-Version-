@@ -27,7 +27,7 @@ function Alerts({ message, active, type, onClose }: AlertProps) {
 
   const getAlertClasses = () => {
     let containerClasses =
-      "fixed top-5 inset-x-0 mx-auto z-50 rounded-xl border p-4 backdrop-blur-md shadow-lg max-w-md w-[calc(100%-1.5rem)] animate-in fade-in slide-in-from-top-2 duration-300";
+      "fixed top-10 inset-x-0 mx-auto z-50 rounded-xl border p-4 backdrop-blur-md shadow-lg max-w-md w-[calc(100%-1.5rem)] animate-in fade-in slide-in-from-top-2 duration-300";
 
     let svgClasses = "w-6 h-6 shrink-0";
 

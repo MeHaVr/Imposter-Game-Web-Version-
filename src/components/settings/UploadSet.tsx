@@ -12,8 +12,7 @@ type UploadSetProps = {
   SetErrorType: (type: "success" | "error" | "info" | "warning" | null) => void;
   onCloseSettings?: () => void;
 };
-const backend = import.meta.env.VITE_BACKEND;
-const ENDPOINT = `${backend}`;
+const ENDPOINT = "https://imposter.olechurie-annies.ch/api";
 const PREVIEW_LIMIT = 6;
 const PREVIEW_SCROLL_MAX_H = "max-h-56";
 

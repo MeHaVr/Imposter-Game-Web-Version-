@@ -64,8 +64,7 @@ function SettingsMenu({
   const [showUploadSet, setShowUploadSet] = useState(false);
 
   const MAX_VISIBLE_WORDSETS = 5;
-  const backend = import.meta.env.VITE_BACKEND;
-  const EndPoint = `${backend}`;
+  const EndPoint = "https://imposter.olechurie-annies.ch/api";
 
   useEffect(() => {
     if (!open) return;
@@ -93,6 +92,7 @@ function SettingsMenu({
         const response = await axios.get<WordSetListItem[]>(
           `${EndPoint}/word-sets`,
         );
+        console.log(response.data);
         setWordSets(response.data);
       } catch (error) {
         console.error("Error fetching word sets:", error);
@@ -223,6 +223,8 @@ function SettingsMenu({
       setIsRedeeming(false);
     }
   };
+
+  console.log("visibleWordSets: ", visibleWordSets);
 
   return (
     <>

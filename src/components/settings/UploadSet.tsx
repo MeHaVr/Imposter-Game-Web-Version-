@@ -138,8 +138,8 @@ function UploadSet({
 
     try {
       const endpoint = isPrivat
-        ? `${ENDPOINT}/api/new-word-set/privat`
-        : ENDPOINT + "/api/new-word-set";
+        ? `${ENDPOINT}/new-word-set/privat`
+        : ENDPOINT + "/new-word-set";
       const params: any = {
         title: title.trim(),
         desc: desc.trim(),
@@ -150,7 +150,7 @@ function UploadSet({
       }
 
       await axios.post(
-        endpoint + "/api/new-word-set",
+        endpoint + "/new-word-set",
         { words: localWords },
         { params },
       );

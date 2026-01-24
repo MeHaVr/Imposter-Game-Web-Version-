@@ -91,7 +91,7 @@ function SettingsMenu({
     const fetchWordSets = async () => {
       try {
         const response = await axios.get<WordSetListItem[]>(
-          `${EndPoint}/api/word-sets`,
+          `${EndPoint}/word-sets`,
         );
         setWordSets(response.data);
       } catch (error) {
@@ -155,7 +155,7 @@ function SettingsMenu({
   const addWordsFromSet = async (id: string) => {
     try {
       const response = await axios.get<WordSetDetail>(
-        `${EndPoint}/api/word-sets/${id}`,
+        `${EndPoint}/word-sets/${id}`,
       );
       const wordSet = response.data;
 
@@ -191,7 +191,7 @@ function SettingsMenu({
     setRedeemError(null);
 
     try {
-      const res = await axios.post(`${EndPoint}/api/word-sets/privat/redeem/`, {
+      const res = await axios.post(`${EndPoint}/word-sets/privat/redeem/`, {
         privatCode,
       });
 

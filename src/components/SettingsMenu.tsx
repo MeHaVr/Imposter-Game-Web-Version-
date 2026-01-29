@@ -257,7 +257,7 @@ function SettingsMenu({
       >
         <div className="p-5 flex items-center justify-between shrink-0 border-b border-white/10 pt-10">
           <div className="text-sm font-semibold uppercase tracking-widest text-white/60">
-            Settings
+            Einstellungen
           </div>
 
           <button

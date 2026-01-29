@@ -51,22 +51,6 @@ function App() {
     }
   }, [customWords]);
 
-  // ✅ Für Web: Fullscreen API verwenden
-  useEffect(() => {
-    const enterFullscreen = async () => {
-      try {
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-          await elem.requestFullscreen();
-        }
-      } catch (error) {
-        console.log("Fullscreen konnte nicht aktiviert werden:", error);
-      }
-    };
-
-    enterFullscreen();
-  }, []);
-
   const handleCloseAlert = () => {
     setIsError(false);
     setErrorMsg(null);
@@ -74,7 +58,7 @@ function App() {
   };
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden select-none text-white">
+    <div className="fixed inset-0 w-full h-full text-white pb-[env(safe-area-inset-bottom)]">
       {/* Hintergrundbild */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat brightness-75"
@@ -82,7 +66,7 @@ function App() {
       />
 
       {/* Content Container - touch-none verhindert ungewollte Gesten auf dem Container */}
-      <div className="relative z-10 flex flex-col h-full touch-none">
+      <div className="relative z-10 flex flex-col h-full">
         <SettingsMenu
           open={settingsOpen}
           onToggle={() => setSettingsOpen((v) => !v)}
@@ -122,7 +106,7 @@ function App() {
         </div>
 
         {/* Game Container - touch-auto erlaubt Touch-Events für Buttons */}
-        <div className="flex-1 flex justify-center items-center pb-10 touch-auto">
+        <div className="flex-1 overflow-y-auto pb-10 px-4">
           <Game
             timerSeconds={timerSeconds}
             tipMode={tipMode}

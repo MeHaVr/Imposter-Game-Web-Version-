@@ -43,7 +43,7 @@ function WordShowCard({
         "
         aria-label={showWord ? "Word shown" : "Show word"}
       >
-        <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition group-hover:opacity-100 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition group-hover:opacity-100 bg-linear-to-br from-blue-500/10 via-transparent to-transparent" />
 
         <div className="relative px-6 text-center w-full">
           {showWord ? (

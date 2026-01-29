@@ -127,7 +127,7 @@ function Game({
     return (
       <div className="flex flex-col items-center text-black mx-5">
         <h3 className="text-xl font-bold mb-4 text-white">
-          Select Game Options
+          Spieloptionen auswählen
         </h3>
 
         <div className="w-full space-y-4">
@@ -188,7 +188,7 @@ function Game({
                     placeholder:text-white/40 outline-none
                     focus:bg-white/15 focus:ring-2 focus:ring-blue-500/60
                   "
-                  placeholder={`Player ${index + 1} Name`}
+                  placeholder={`Spieler ${index + 1} Name`}
                   value={playerNames[index] || ""}
                   onChange={(e) => {
                     const updated = [...playerNames];
@@ -271,7 +271,6 @@ function Game({
             window.setTimeout(() => setCanGoNext(true), 350);
           }}
           onBack={() => setGameState("Start")}
-          // ✅ FIX: tip only for imposters + only if tipMode enabled
           isTipword={tipMode && isImposter}
           tipWord={tipWord}
         />
@@ -365,7 +364,7 @@ function Game({
             focus:outline-none focus:ring-2 focus:ring-blue-500/60
           "
         >
-          Skip Timer
+          Timer überspringen
         </button>
       </div>
     );
@@ -377,7 +376,7 @@ function Game({
       <div className="flex flex-col items-center gap-6 text-white">
         <BackButton onClick={() => setGameState("Start")} />
 
-        <h2 className="text-3xl font-bold tracking-wide">Game Over</h2>
+        <h2 className="text-3xl font-bold tracking-wide">Spiel vorbei</h2>
 
         <div className="text-center text-white/70">Das gesuchte Wort war</div>
 

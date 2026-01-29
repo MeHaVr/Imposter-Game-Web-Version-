@@ -255,7 +255,7 @@ function SettingsMenu({
         className={`fixed top-0 right-0 z-50 h-dvh w-full sm:w-[400px] border-l border-white/10 bg-neutral-950/70 backdrop-blur-md shadow-2xl shadow-black/40 transition-transform duration-200 ${open ? "translate-x-0" : "translate-x-full"} flex flex-col`}
         aria-hidden={!open}
       >
-        <div className="p-5 flex items-center justify-between shrink-0 border-b border-white/10">
+        <div className="p-5 flex items-center justify-between shrink-0 border-b border-white/10 pt-10">
           <div className="text-sm font-semibold uppercase tracking-widest text-white/60">
             Settings
           </div>

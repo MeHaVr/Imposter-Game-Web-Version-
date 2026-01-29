@@ -1,11 +1,5 @@
 /* Mobile Touch Optimierungen - Nur was Tailwind nicht kann */
 
-* {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-}
-
-/* Verhindert Pull-to-Refresh */
 body {
   overscroll-behavior-y: contain;
   position: fixed;

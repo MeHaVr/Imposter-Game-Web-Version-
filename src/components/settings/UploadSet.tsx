@@ -21,7 +21,6 @@ function UploadSet({
   onClose,
   words,
   onSuccess,
-  helpHref = "https://example.com/how-to-upload-word-sets",
   SetErrorMsg,
   SetIsError,
   SetErrorType,
@@ -209,7 +208,9 @@ function UploadSet({
                 Titel & Beschreibung helfen anderen dein Set zu verstehen.
               </div>
               <a
-                href={helpHref}
+                href={
+                  "https://imposter.olechurie-annies.ch/how-to-upload-word-sets"
+                }
                 target="_blank"
                 rel="noreferrer"
                 className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-blue-300 hover:text-blue-200 transition focus:outline-none focus:ring-2 focus:ring-blue-500/60 rounded-lg px-2 py-1"

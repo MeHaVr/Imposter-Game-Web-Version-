@@ -74,7 +74,7 @@ function App() {
   };
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden select-none">
+    <div className="fixed inset-0 w-full h-full overflow-hidden select-none text-white">
       {/* Hintergrundbild */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat brightness-75"

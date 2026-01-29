@@ -83,7 +83,10 @@ function Alerts({ message, active, type, onClose }: AlertProps) {
             setIsVisible(false);
             onClose?.();
           }}
-          className="shrink-0 text-white/60 hover:text-white/90 transition"
+          className="shrink-0 text-white/60 hover:text-white/90 touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none"
           aria-label="Schließen"
         >
           ✕

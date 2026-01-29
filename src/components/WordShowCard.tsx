@@ -27,11 +27,15 @@ function WordShowCard({
           if (!showWord && !isEndScreen) onToggle();
         }}
         className="
+        touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none
           group relative w-72 h-44
           rounded-2xl border border-white/10
           bg-white/5 backdrop-blur-md
           shadow-lg shadow-black/20
-          transition duration-200
+          duration-200
           hover:border-white/20 hover:bg-white/10
           active:scale-[0.99]
           focus:outline-none focus:ring-2 focus:ring-blue-500/60

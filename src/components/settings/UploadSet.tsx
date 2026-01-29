@@ -148,11 +148,7 @@ function UploadSet({
         params.privatCode = privatSetCode;
       }
 
-      await axios.post(
-        endpoint + "/new-word-set",
-        { words: localWords },
-        { params },
-      );
+      await axios.post(endpoint, { words: localWords }, { params });
 
       SetErrorMsg("✅ Set wurde hochgeladen! Warte bis es jemand akzeptiert.");
       SetIsError(true);

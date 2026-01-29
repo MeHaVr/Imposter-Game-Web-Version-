@@ -231,7 +231,10 @@ function SettingsMenu({
       <button
         type="button"
         onClick={disabled ? AlertOpeningSettingsMidGame : onToggle}
-        className="fixed top-5 right-5 z-50 pointer-events-auto h-11 w-11 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md shadow-lg shadow-black/20 flex items-center justify-center transition hover:bg-white/10 hover:border-white/20 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-500/60"
+        className="touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none fixed top-10 right-5 z-50 pointer-events-auto h-11 w-11 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md shadow-lg shadow-black/20 flex items-center justify-center hover:bg-white/10 hover:border-white/20 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-500/60"
         aria-label={open ? "Close settings" : "Open settings"}
       >
         <div className="flex flex-col gap-1">
@@ -260,7 +263,10 @@ function SettingsMenu({
           <button
             type="button"
             onClick={onClose}
-            className="h-9 w-9 rounded-xl border border-white/10 bg-white/5 transition hover:bg-white/10 hover:border-white/20 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-500/60 text-white/80"
+            className="touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none h-9 w-9 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-500/60 text-white/80"
             aria-label="Close settings"
           >
             ✕
@@ -287,7 +293,10 @@ function SettingsMenu({
               <button
                 type="button"
                 onClick={() => setIsTimeMode(!isTimeMode)}
-                className={`relative h-8 w-14 rounded-full border transition ${isTimeMode ? "bg-blue-500/60 border-blue-500/40" : "bg-white/10 border-white/15"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
+                className={`touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none relative h-8 w-14 rounded-full border ${isTimeMode ? "bg-blue-500/60 border-blue-500/40" : "bg-white/10 border-white/15"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
               >
                 <span
                   className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-white transition-transform ${isTimeMode ? "translate-x-6" : "translate-x-0"}`}
@@ -327,7 +336,10 @@ function SettingsMenu({
               <button
                 type="button"
                 onClick={() => setTipMode(!tipMode)}
-                className={`relative h-8 w-14 rounded-full border transition ${tipMode ? "bg-blue-500/60 border-blue-500/40" : "bg-white/10 border-white/15"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
+                className={`touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none relative h-8 w-14 rounded-full border ${tipMode ? "bg-blue-500/60 border-blue-500/40" : "bg-white/10 border-white/15"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
               >
                 <span
                   className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-white transition-transform ${tipMode ? "translate-x-6" : "translate-x-0"}`}
@@ -350,7 +362,10 @@ function SettingsMenu({
               <button
                 type="button"
                 onClick={() => setIsImposterWordVisible((v) => !v)}
-                className={`relative h-8 w-14 rounded-full border transition ${isImposterWordVisible ? "bg-blue-500/60 border-blue-500/40" : "bg-white/10 border-white/15"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
+                className={`touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none relative h-8 w-14 rounded-full border  ${isImposterWordVisible ? "bg-blue-500/60 border-blue-500/40" : "bg-white/10 border-white/15"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
               >
                 <span
                   className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-white transition-transform ${isImposterWordVisible ? "translate-x-6" : "translate-x-0"}`}
@@ -383,7 +398,10 @@ function SettingsMenu({
                 type="button"
                 disabled={!canAdd}
                 onClick={addCustomWord}
-                className={`w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition ${canAdd ? "bg-blue-500/80 hover:bg-blue-500 text-white" : "bg-gray-400 cursor-not-allowed text-white/80"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
+                className={` touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none w-full rounded-lg px-4 py-2.5 text-sm font-semibold ${canAdd ? "bg-blue-500/80 hover:bg-blue-500 text-white" : "bg-gray-400 cursor-not-allowed text-white/80"} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
               >
                 Hinzufügen
               </button>
@@ -430,7 +448,10 @@ function SettingsMenu({
                     <button
                       type="button"
                       onClick={() => removeWord(w.word)}
-                      className="shrink-0 rounded-md px-2 py-1 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 transition focus:outline-none focus:ring-2 focus:ring-blue-500/60"
+                      className="touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none shrink-0 rounded-md px-2 py-1 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/60"
                     >
                       Entfernen
                     </button>
@@ -447,7 +468,10 @@ function SettingsMenu({
                     setCustomWords([]);
                     setActiveSetId(null);
                   }}
-                  className="w-full rounded-lg px-4 py-2 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 transition focus:outline-none focus:ring-2 focus:ring-blue-500/60"
+                  className="touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none w-full rounded-lg px-4 py-2 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/60"
                 >
                   Alle löschen
                 </button>
@@ -455,7 +479,10 @@ function SettingsMenu({
                 <button
                   type="button"
                   onClick={() => setShowUploadSet(true)}
-                  className="w-full rounded-lg px-4 py-2 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 transition focus:outline-none focus:ring-2 focus:ring-blue-500/60"
+                  className="touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none w-full rounded-lg px-4 py-2 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/60"
                 >
                   Set hochladen
                 </button>
@@ -503,7 +530,10 @@ function SettingsMenu({
                       <button
                         type="button"
                         onClick={() => removeWordsFromSet(w.id)}
-                        className="shrink-0 rounded-md px-2 py-1 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 transition focus:outline-none focus:ring-2 focus:ring-blue-500/60"
+                        className="touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none shrink-0 rounded-md px-2 py-1 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/60"
                       >
                         Entfernen
                       </button>
@@ -525,7 +555,10 @@ function SettingsMenu({
               <button
                 type="button"
                 onClick={() => setShowAllWordSets((v) => !v)}
-                className="mt-3 w-full rounded-lg px-4 py-2 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 transition focus:outline-none focus:ring-2 focus:ring-blue-500/60"
+                className="touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none mt-3 w-full rounded-lg px-4 py-2 text-xs font-semibold bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/60"
               >
                 {showAllWordSets
                   ? "Weniger anzeigen"
@@ -557,11 +590,14 @@ function SettingsMenu({
                 type="button"
                 disabled={privatCode.length !== 5 || isRedeeming}
                 onClick={redeemPrivatCode}
-                className={`shrink-0 rounded-lg px-4 py-3 text-sm font-semibold transition ${
-                  privatCode.length !== 5 || isRedeeming
-                    ? "bg-gray-500/40 text-white/70 cursor-not-allowed"
-                    : "bg-blue-500/80 hover:bg-blue-500 text-white"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
+                className={`touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none shrink-0 rounded-lg px-4 py-3 text-sm font-semibold ${
+    privatCode.length !== 5 || isRedeeming
+      ? "bg-gray-500/40 text-white/70 cursor-not-allowed"
+      : "bg-blue-500/80 hover:bg-blue-500 text-white"
+  } focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
               >
                 {isRedeeming ? "..." : "Einlösen"}
               </button>

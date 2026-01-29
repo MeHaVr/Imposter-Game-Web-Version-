@@ -203,11 +203,14 @@ function Game({
 
         <button
           disabled={!canStart}
-          className={`mt-6 px-6 py-2.5 rounded-xl font-semibold ${
-            canStart
-              ? "bg-blue-500 hover:bg-blue-700 text-white"
-              : "bg-gray-400 cursor-not-allowed text-white/80"
-          }`}
+          className={`touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none mt-6 px-6 py-2.5 rounded-xl font-semibold ${
+    canStart
+      ? "bg-blue-500 hover:bg-blue-700 text-white"
+      : "bg-gray-400 cursor-not-allowed text-white/80"
+  }`}
           onClick={() => {
             const imposterIdx = pickRandomIndexes(
               playerNames.length,
@@ -276,11 +279,14 @@ function Game({
         <button
           type="button"
           disabled={!canGoNext}
-          className={`px-6 py-2.5 rounded-xl font-semibold transition ${
-            canGoNext
-              ? "bg-blue-500 hover:bg-blue-600 text-white"
-              : "bg-gray-400 cursor-not-allowed text-white/80"
-          }`}
+          className={`touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none px-6 py-2.5 rounded-xl font-semibold ${
+    canGoNext
+      ? "bg-blue-500 hover:bg-blue-600 text-white"
+      : "bg-gray-400 cursor-not-allowed text-white/80"
+  }`}
           onClick={() => {
             if (!canGoNext) return;
 
@@ -313,12 +319,16 @@ function Game({
             type="button"
             onClick={handleTimerEnd}
             className="
+            touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none
               w-72 rounded-xl px-4 py-2.5
               font-semibold text-white
               bg-white/10 backdrop-blur-md
               border border-white/10
               shadow-md shadow-black/20
-              transition
+              
               hover:bg-white/20 hover:border-white/20
               active:scale-[0.98]
               focus:outline-none focus:ring-2 focus:ring-blue-500/60
@@ -340,12 +350,16 @@ function Game({
           type="button"
           onClick={handleTimerEnd}
           className="
+          touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none
             w-72 rounded-xl px-4 py-2.5
             font-semibold text-white
             bg-white/10 backdrop-blur-md
             border border-white/10
             shadow-md shadow-black/20
-            transition
+            
             hover:bg-white/20 hover:border-white/20
             active:scale-[0.98]
             focus:outline-none focus:ring-2 focus:ring-blue-500/60
@@ -397,11 +411,15 @@ function Game({
           type="button"
           onClick={() => setGameState("Start")}
           className="
+          touch-manipulation 
+  active:scale-95 
+  transition-transform 
+  select-none
             mt-2 rounded-xl px-6 py-2.5
             font-semibold text-white
             bg-blue-500/80
             hover:bg-blue-500
-            transition
+            
             focus:outline-none focus:ring-2 focus:ring-blue-500/60
           "
         >
